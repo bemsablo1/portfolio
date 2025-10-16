@@ -274,3 +274,14 @@ nav ul li a:hover {
     height: 200px;
   }
 }
+
+@media (max-width: 480px) {
+  .projects-grid {
+    grid-template-columns: 1fr; /* one column on small screens */
+  }
+
+  .project-card {
+    width: 100%;
+  }
+}
+
