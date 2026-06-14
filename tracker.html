@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Career Tracker — Piyush Tiwari</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;1,9..144,300&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#08090d;--s1:#0f1117;--s2:#161920;--s3:#1c2030;
+  --b1:#1e2535;--b2:#28334a;--b3:#333f58;
+  --acc:#4f7ef5;--acc2:#7ba8ff;
+  --g:#28c87a;--g2:#1da060;--am:#e09a1a;--rd:#e04545;--pu:#9b6ef5;--pu2:#b99aff;--cy:#1ab8d8;--cy2:#5dd4ee;
+  --tx:#d8e2f2;--tx2:#6e7f99;--tx3:#333f55;
+  --mono:'DM Mono',monospace;--serif:'Fraunces',serif;--sans:'DM Sans',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--tx);font-family:var(--sans);font-size:14px;line-height:1.65;min-height:100vh}
+
+.topnav{background:rgba(8,9,13,.96);backdrop-filter:blur(12px);border-bottom:.5px solid var(--b1);padding:0 32px;display:flex;align-items:stretch;z-index:200;position:sticky;top:0;overflow-x:auto}
+.topnav-brand{font-family:var(--mono);font-size:11px;font-weight:500;color:var(--tx);padding:14px 20px 14px 0;border-right:.5px solid var(--b1);margin-right:8px;white-space:nowrap;display:flex;align-items:center;flex-shrink:0}
+.topnav-brand b{color:var(--acc2);font-weight:500}
+.tab-btn{font-family:var(--mono);font-size:10px;letter-spacing:.07em;text-transform:uppercase;color:var(--tx2);background:none;border:none;cursor:pointer;padding:0 16px;border-bottom:2px solid transparent;transition:color .15s,border-color .15s;white-space:nowrap;flex-shrink:0}
+.tab-btn:hover{color:var(--tx)}
+.tab-btn.active{color:var(--acc2);border-bottom-color:var(--acc)}
+.topnav-right{margin-left:auto;display:flex;align-items:center;gap:12px;padding-left:16px;border-left:.5px solid var(--b1);flex-shrink:0}
+.save-indicator{font-family:var(--mono);font-size:10px;color:var(--tx3);transition:color .3s;white-space:nowrap}
+.save-indicator.saved{color:var(--g)}
+
+.tab-content{display:none}.tab-content.active{display:block}
+.page{max-width:980px;margin:0 auto;padding:48px 28px 100px}
+.sh{font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--tx3);margin-bottom:18px;padding-bottom:10px;border-bottom:.5px solid var(--b1);display:flex;align-items:center;gap:12px}
+.sh-num{color:var(--b3)}
+section{margin-bottom:52px}
+.hero{margin-bottom:42px;padding-left:24px;border-left:3px solid var(--acc)}
+.hero-eye{font-family:var(--mono);font-size:10px;color:var(--acc);letter-spacing:.14em;text-transform:uppercase;margin-bottom:10px}
+.hero h1{font-family:var(--serif);font-size:34px;font-weight:300;color:var(--tx);margin-bottom:8px;line-height:1.15}
+.hero h1 em{font-style:italic;color:var(--acc2)}
+.hero-sub{font-family:var(--mono);font-size:11px;color:var(--tx2);line-height:1.7}
+
+.score-strip{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:24px}
+.sc{background:var(--s1);border:.5px solid var(--b1);border-radius:12px;padding:16px;text-align:center}
+.sc-val{font-size:22px;font-weight:600;line-height:1.1;margin-bottom:5px;font-family:var(--serif)}
+.sc-lbl{font-family:var(--mono);font-size:10px;color:var(--tx2);line-height:1.4}
+.g-col{color:var(--g)}.am-col{color:var(--am)}.rd-col{color:var(--rd)}.acc-col{color:var(--acc2)}.pu-col{color:var(--pu2)}
+
+.dim-wrap{background:var(--s1);border:.5px solid var(--b1);border-radius:12px;padding:18px 22px;margin-bottom:12px}
+.dim-group-label{font-family:var(--mono);font-size:10px;color:var(--tx3);letter-spacing:.08em;text-transform:uppercase;margin-bottom:12px;margin-top:4px}
+.dim-row{display:flex;align-items:center;gap:12px;margin-bottom:9px}
+.dim-row:last-child{margin-bottom:0}
+.dim-lbl{font-size:12px;color:var(--tx2);min-width:190px;flex-shrink:0}
+.dim-bar-bg{flex:1;height:5px;background:var(--s3);border-radius:3px;overflow:hidden}
+.dim-bar{height:100%;border-radius:3px}
+.dbg{background:var(--g)}.dba{background:var(--am)}.dbr{background:var(--rd)}
+.dim-score{font-family:var(--mono);font-size:11px;min-width:28px;text-align:right;color:var(--tx2)}
+
+.gap-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.gc{background:var(--s1);border:.5px solid var(--b1);border-radius:12px;padding:16px 18px}
+.gc-head{display:flex;align-items:flex-start;gap:10px;margin-bottom:9px}
+.badge{font-family:var(--mono);font-size:9px;padding:3px 9px;border-radius:4px;letter-spacing:.05em;text-transform:uppercase;flex-shrink:0;margin-top:1px;border:.5px solid transparent}
+.bg-r{background:rgba(224,69,69,.12);color:var(--rd);border-color:rgba(224,69,69,.3)}
+.bg-a{background:rgba(224,154,26,.1);color:var(--am);border-color:rgba(224,154,26,.25)}
+.bg-g{background:rgba(40,200,122,.09);color:var(--g);border-color:rgba(40,200,122,.25)}
+.bg-b{background:rgba(79,126,245,.1);color:var(--acc2);border-color:rgba(79,126,245,.25)}
+.gc-title{font-size:13px;font-weight:600;color:var(--tx);line-height:1.3}
+.gc-body{font-size:12px;color:var(--tx2);line-height:1.65}
+.gc-body strong{color:var(--tx);font-weight:600}
+
+/* roadmap */
+.rm-wrap{position:relative;padding-left:52px}
+.rm-line{position:absolute;left:18px;top:20px;bottom:20px;width:1px;background:var(--b2)}
+.rm-item{position:relative;margin-bottom:12px}
+.rm-dot{position:absolute;left:-52px;width:36px;height:36px;border-radius:50%;border:1.5px solid var(--b2);background:var(--s1);display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:9px;color:var(--tx2);z-index:1;text-align:center;line-height:1.1}
+.rm-dot.p0{border-color:var(--rd);background:rgba(224,69,69,.08);color:var(--rd)}
+.rm-dot.p1{border-color:var(--acc);background:rgba(79,126,245,.08);color:var(--acc2)}
+.rm-dot.p2{border-color:var(--am);background:rgba(224,154,26,.08);color:var(--am)}
+.rm-dot.p3{border-color:var(--pu);background:rgba(155,110,245,.08);color:var(--pu2)}
+.rm-card{background:var(--s1);border:.5px solid var(--b1);border-radius:12px;padding:16px 18px}
+.rm-head{display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap}
+.rm-title{font-size:14px;font-weight:600;color:var(--tx)}
+.rm-when{font-family:var(--mono);font-size:10px;color:var(--tx3);margin-left:auto}
+.rm-goal{font-size:12px;color:var(--tx2);margin-bottom:12px;font-style:italic;border-left:2px solid var(--b2);padding-left:10px}
+.rm-list{list-style:none}
+.rm-list li{font-size:12.5px;color:var(--tx2);padding:4px 0 4px 14px;border-left:1.5px solid var(--b2);margin-bottom:6px;line-height:1.55}
+.rm-list li strong{color:var(--tx);font-weight:600}
+
+/* checklist */
+.cl-progress-label{font-family:var(--mono);font-size:11px;color:var(--tx2);margin-bottom:8px;display:flex;justify-content:space-between}
+.cl-progress-bar{height:4px;background:var(--s3);border-radius:2px;overflow:hidden;margin-bottom:24px}
+.cl-progress-fill{height:100%;background:var(--g);border-radius:2px;transition:width .4s ease;width:0}
+.cl-group{margin-bottom:24px}
+.cl-group-title{font-family:var(--mono);font-size:10px;color:var(--tx3);letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px;padding-bottom:6px;border-bottom:.5px solid var(--b1);display:flex;justify-content:space-between}
+.cl-group-title span{color:var(--tx2)}
+.cl-item{display:flex;align-items:flex-start;gap:12px;padding:10px 14px;border-radius:8px;margin-bottom:4px;cursor:pointer;transition:background .1s}
+.cl-item:hover{background:var(--s2)}
+.cl-item.done{opacity:.5}
+.cl-cb{width:16px;height:16px;border:1.5px solid var(--b3);border-radius:3px;flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;transition:all .15s;background:transparent}
+.cl-item.done .cl-cb{background:var(--g2);border-color:var(--g2)}
+.cl-cb-tick{display:none;width:8px;height:8px}
+.cl-item.done .cl-cb-tick{display:block}
+.cl-text{flex:1}
+.cl-label{font-size:13px;color:var(--tx);line-height:1.4}
+.cl-item.done .cl-label{text-decoration:line-through;color:var(--tx2)}
+.cl-meta{font-family:var(--mono);font-size:10px;color:var(--tx3);margin-top:3px;line-height:1.5}
+.cl-tag{font-family:var(--mono);font-size:9px;padding:1px 6px;border-radius:3px;margin-left:8px;vertical-align:middle;text-transform:uppercase;letter-spacing:.04em}
+
+.notes-wrap{background:var(--s1);border:.5px solid var(--b1);border-radius:12px;padding:18px 20px;margin-top:8px}
+.notes-wrap label{font-family:var(--mono);font-size:10px;color:var(--tx3);letter-spacing:.08em;text-transform:uppercase;display:block;margin-bottom:10px}
+.notes-area{width:100%;min-height:120px;background:var(--bg);border:.5px solid var(--b1);border-radius:8px;color:var(--tx);font-family:var(--sans);font-size:13px;padding:12px 14px;resize:vertical;line-height:1.6}
+.notes-area:focus{outline:none;border-color:var(--b3)}
+
+.btn-ghost{font-family:var(--mono);font-size:10px;letter-spacing:.05em;text-transform:uppercase;color:var(--tx2);background:none;border:.5px solid var(--b2);border-radius:6px;padding:7px 14px;cursor:pointer;transition:all .15s}
+.btn-ghost:hover{color:var(--rd);border-color:rgba(224,69,69,.4)}
+
+.note-box{background:var(--s1);border:.5px solid var(--b1);border-radius:12px;padding:16px 20px;font-size:12.5px;color:var(--tx2);line-height:1.7;margin-bottom:16px}
+.note-box strong{color:var(--tx);font-weight:600}
+
+@media(max-width:680px){
+  .score-strip{grid-template-columns:1fr 1fr}
+  .gap-grid{grid-template-columns:1fr}
+  .dim-lbl{min-width:130px}
+  .page{padding:32px 18px 80px}
+}
+/* expandable learning items */
+.li-item{border-bottom:.5px solid var(--b1)}
+.li-item:last-child{border-bottom:none}
+.li-head{display:flex;align-items:center;gap:11px;padding:11px 8px;cursor:pointer;border-radius:8px;transition:background .1s}
+.li-head:hover{background:var(--s2)}
+.li-chevron{font-size:10px;color:var(--tx3);transition:transform .15s;width:10px;flex-shrink:0;text-align:center}
+.li-chevron.open{transform:rotate(90deg)}
+.li-cb{width:16px;height:16px;border:1.5px solid var(--b3);border-radius:3px;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all .15s;background:transparent}
+.li-cb.done{background:var(--g2);border-color:var(--g2)}
+.li-cb.partial{border-color:var(--am)}
+.li-cb .tick{display:none}
+.li-cb.done .tick{display:block;width:8px;height:8px}
+.li-cb .dash{display:none}
+.li-cb.partial .dash{display:block;width:8px;height:2px;background:var(--am);border-radius:1px}
+.li-text{flex:1;min-width:0}
+.li-label{font-size:13px;color:var(--tx);line-height:1.35}
+.li-label.done{color:var(--tx2);text-decoration:line-through}
+.li-prog{font-family:var(--mono);font-size:10px;color:var(--tx3);flex-shrink:0;min-width:30px;text-align:right}
+.li-subs{display:none;padding:2px 0 12px 37px}
+.li-subs.open{display:block}
+.sub-item{display:flex;align-items:flex-start;gap:9px;padding:5px 8px;border-radius:6px;cursor:pointer;transition:background .1s}
+.sub-item:hover{background:var(--s2)}
+.sub-cb{width:13px;height:13px;border:1.5px solid var(--b3);border-radius:3px;flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center;background:transparent;transition:all .15s}
+.sub-item.done .sub-cb{background:var(--g2);border-color:var(--g2)}
+.sub-cb .tick{display:none}
+.sub-item.done .sub-cb .tick{display:block;width:7px;height:7px}
+.sub-label{font-size:12px;color:var(--tx2);line-height:1.45}
+.sub-item.done .sub-label{text-decoration:line-through;color:var(--tx3)}
+
+/* login gate */
+#login-gate{display:none;position:fixed;inset:0;z-index:1000;background:var(--bg);align-items:center;justify-content:center;padding:24px}
+body.locked #login-gate{display:flex}
+body.locked .topnav,body.locked .tab-content{display:none}
+.lg-card{width:100%;max-width:340px;background:var(--s1);border:.5px solid var(--b1);border-radius:16px;padding:34px 28px;text-align:center}
+.lg-brand{font-family:var(--mono);font-size:10px;letter-spacing:.12em;color:var(--acc2);margin-bottom:22px}
+.lg-title{font-family:var(--serif);font-size:24px;font-weight:300;color:var(--tx);margin-bottom:5px}
+.lg-sub{font-size:12px;color:var(--tx2);margin-bottom:24px}
+.lg-input{width:100%;background:var(--bg);border:.5px solid var(--b2);border-radius:8px;color:var(--tx);font-family:var(--sans);font-size:13px;padding:11px 14px;margin-bottom:10px}
+.lg-input:focus{outline:none;border-color:var(--acc)}
+.lg-btn{width:100%;background:var(--acc);color:#fff;border:none;border-radius:8px;padding:12px;font-family:var(--sans);font-size:13px;font-weight:600;cursor:pointer;margin-top:4px;transition:background .15s}
+.lg-btn:hover{background:#3f6fe0}
+.lg-error{display:none;color:var(--rd);font-size:11px;margin-top:13px;font-family:var(--mono)}
+.lock-btn{font-family:var(--mono);font-size:10px;letter-spacing:.05em;text-transform:uppercase;color:var(--tx3);background:none;border:none;cursor:pointer;padding:0;transition:color .15s}
+.lock-btn:hover{color:var(--tx)}
+
+</style>
+</head>
+<body class="locked">
+
+<div id="login-gate">
+  <div class="lg-card">
+    <div class="lg-brand">PIYUSH · CAREER OS</div>
+    <div class="lg-title">Private dashboard</div>
+    <div class="lg-sub">Sign in to continue.</div>
+    <input id="lg-email" class="lg-input" type="email" placeholder="email" autocomplete="username" onkeydown="if(event.key==='Enter')attemptLogin()">
+    <input id="lg-pass" class="lg-input" type="password" placeholder="password" autocomplete="current-password" onkeydown="if(event.key==='Enter')attemptLogin()">
+    <button class="lg-btn" onclick="attemptLogin()">Sign in</button>
+    <div id="lg-error" class="lg-error"></div>
+  </div>
+</div>
+
+<nav class="topnav">
+  <div class="topnav-brand">PIYUSH&nbsp;<b>·</b>&nbsp;CAREER OS</div>
+  <button class="tab-btn active" onclick="switchTab('overview',this)">Overview</button>
+  <button class="tab-btn" onclick="switchTab('roadmap',this)">Roadmap</button>
+  <button class="tab-btn" onclick="switchTab('tracker',this)">Tracker</button>
+  <button class="tab-btn" onclick="switchTab('learning',this)">Learning</button>
+  <button class="tab-btn" onclick="switchTab('ai',this)">AI &amp; Moat</button>
+  <div class="topnav-right">
+    <span class="save-indicator" id="saveIndicator">all saved</span>
+    <button class="lock-btn" onclick="logout()" title="Lock dashboard">⊘ lock</button>
+  </div>
+</nav>
+
+<!-- OVERVIEW -->
+<div class="tab-content active" id="tab-overview">
+  <div class="page">
+    <div class="hero">
+      <div class="hero-eye">Career Readiness · iOS / tvOS Engineer</div>
+      <h1>The <em>honest</em> read, made trackable.</h1>
+      <div class="hero-sub">~4 yrs experience · Bengaluru · Logituit (OTT)<br>The next 12 months decide: consolidate toward senior, or plateau as a mid-level implementer.</div>
+    </div>
+
+    <section>
+      <div class="sh"><span class="sh-num">01</span> Readiness at a glance</div>
+      <div class="score-strip" id="score-strip"></div>
+      <div class="note-box"><strong>Read this honestly:</strong> your niche is real and it opens doors — but the interview, the hopping pattern, and a generalist identity are what will lose offers. These four numbers are my assessment, not a compliment. The job is to move the red ones.</div>
+    </section>
+
+    <section>
+      <div class="sh"><span class="sh-num">02</span> Skills — where you actually stand</div>
+      <div id="skills-root"></div>
+      <div class="note-box" style="margin-top:14px">Green = a credible strength you can interview on. Amber = usable but shallow. Red = a gap that will get exposed. These are my estimates from what I know of your work — adjust them in your head as you go.</div>
+    </section>
+
+    <section>
+      <div class="sh"><span class="sh-num">03</span> Critical gaps to close</div>
+      <div class="gap-grid" id="gaps-root"></div>
+    </section>
+  </div>
+</div>
+
+<!-- ROADMAP -->
+<div class="tab-content" id="tab-roadmap">
+  <div class="page">
+    <div class="hero">
+      <div class="hero-eye">The Plan</div>
+      <h1>Now &rarr; 3 &rarr; 6 &rarr; 12 <em>months</em></h1>
+      <div class="hero-sub">Each phase has one job. Don't skip ahead — visibility before depth, depth before the senior move.</div>
+    </div>
+    <section>
+      <div class="rm-wrap" id="roadmap-root">
+        <div class="rm-line"></div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<!-- TRACKER -->
+<div class="tab-content" id="tab-tracker">
+  <div class="page">
+    <div class="hero">
+      <div class="hero-eye">Execution</div>
+      <h1>What I'm <em>working on</em></h1>
+      <div class="hero-sub">Tap to check off. Progress saves automatically. This is the part that actually moves your career.</div>
+    </div>
+    <section>
+      <div class="cl-progress-label"><span id="cl-progress-text">0 / 0 completed</span><span id="cl-progress-pct">0%</span></div>
+      <div class="cl-progress-bar"><div class="cl-progress-fill" id="cl-progress-fill"></div></div>
+      <div id="checklist-root"></div>
+
+      <div class="notes-wrap">
+        <label>Reflection &amp; blockers — what's working, what's stuck (saves automatically)</label>
+        <textarea class="notes-area" id="notes-area" placeholder="e.g. Drafted the focus-engine blog post. Stuck on system design — need a structured resource. Used Claude Code to ship the restore-purchase flow in half the usual time..."></textarea>
+      </div>
+      <div style="margin-top:16px;text-align:right">
+        <button class="btn-ghost" onclick="resetProgress()">reset all progress</button>
+      </div>
+    </section>
+  </div>
+</div>
+
+<!-- LEARNING -->
+<div class="tab-content" id="tab-learning">
+  <div class="page">
+    <div class="hero">
+      <div class="hero-eye">Learning</div>
+      <h1>Polish the <em>craft</em>.</h1>
+      <div class="hero-sub">Two tracks: iOS / tvOS depth, and DSA for interviews. Tap to check off as you genuinely cover something.<br><span style="color:var(--rd)">must</span> = interview-critical &nbsp;·&nbsp; <span style="color:var(--am)">grow</span> = senior depth &nbsp;·&nbsp; <span style="color:var(--g)">solidify</span> = you are already decent, make it interview-proof.</div>
+    </div>
+    <section>
+      <div class="cl-progress-label"><span>iOS / tvOS</span><span id="ln-ios-pct">0%</span></div>
+      <div class="cl-progress-bar"><div class="cl-progress-fill" id="ln-ios-fill" style="background:var(--acc)"></div></div>
+      <div class="cl-progress-label"><span>DSA</span><span id="ln-dsa-pct">0%</span></div>
+      <div class="cl-progress-bar"><div class="cl-progress-fill" id="ln-dsa-fill" style="background:var(--pu)"></div></div>
+      <div id="learning-root"></div>
+      <div style="margin-top:16px;display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap">
+        <button class="btn-ghost" style="color:var(--tx2);border-color:var(--b2)" onclick="setAllExpanded(true)">expand all</button>
+        <button class="btn-ghost" style="color:var(--tx2);border-color:var(--b2)" onclick="setAllExpanded(false)">collapse all</button>
+        <button class="btn-ghost" onclick="resetLearning()">reset learning progress</button>
+      </div>
+    </section>
+  </div>
+</div>
+
+<!-- AI & MOAT -->
+<div class="tab-content" id="tab-ai">
+  <div class="page">
+    <div class="hero">
+      <div class="hero-eye">AI &amp; Your Market</div>
+      <h1>Where AI <em>helps</em>, where it <em>hunts</em>.</h1>
+      <div class="hero-sub">The blunt version: AI doesn't threaten you directly — staying a generalist feature-implementer does. AI just raises the penalty for it.</div>
+    </div>
+    <section>
+      <div class="sh"><span class="sh-num">01</span> The honest landscape</div>
+      <div class="gap-grid" id="ai-root"></div>
+    </section>
+    <section>
+      <div class="sh"><span class="sh-num">02</span> The one-line strategy</div>
+      <div class="note-box" style="font-size:13px">
+        <strong>Climb the abstraction ladder and get loud about the moat.</strong> The work AI compresses hardest is exactly your first three years — Figma-to-SwiftUI, CRUD, e-commerce flows. The work it's bad at is device-bound and under-documented: tvOS focus engine, Instruments profiling, threading/memory bugs, video pipeline tuning, StoreKit edge cases. Lean into that, make it public, and use AI to ship more scope than your peers — so you read as an AI-leveraged senior, not a replaceable mid.
+      </div>
+    </section>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════ STORAGE (window.storage → localStorage fallback) ═══════════════════════
+const SK = { cl:'piyush_cl_v1', notes:'piyush_notes_v1', learn:'piyush_learn_v2' };
+
+async function storeSave(key, data){
+  try{ await window.storage.set(key, JSON.stringify(data)); showSaved(); }
+  catch(e){ try{ localStorage.setItem(key, JSON.stringify(data)); showSaved(); }catch(e2){ console.error('storage fail',e2); } }
+}
+async function storeLoad(key, def){
+  try{ const r = await window.storage.get(key); return r ? JSON.parse(r.value) : def; }
+  catch(e){ try{ const v = localStorage.getItem(key); return v ? JSON.parse(v) : def; }catch(e2){ return def; } }
+}
+function showSaved(){
+  const el = document.getElementById('saveIndicator');
+  el.textContent='saved ✓'; el.classList.add('saved');
+  setTimeout(()=>{ el.textContent='all saved'; el.classList.remove('saved'); },1500);
+}
+
+// ═══════════════════════ LOGIN GATE (soft client-side lock — NOT real security) ═══════════════════════
+const AUTH = {
+  email: 'er.piyush3006@gmail.com',
+  // SHA-256 of the password. Default password is "Logix@2026".
+  // To change it: open the browser console and run:  await sha256('YourNewPassword')
+  // then paste the printed value here, replacing the string below.
+  hash: 'c0a299aa6e17f973f91eab2503493e8175783582d2cd72daba01613f2e3cb430'
+};
+async function sha256(str){
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+  return [...new Uint8Array(buf)].map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+async function attemptLogin(){
+  const email = document.getElementById('lg-email').value.trim().toLowerCase();
+  const pass = document.getElementById('lg-pass').value;
+  const err = document.getElementById('lg-error');
+  try{
+    const h = await sha256(pass);
+    if(email === AUTH.email.toLowerCase() && h === AUTH.hash){
+      unlock();
+      try{ sessionStorage.setItem('piyush_auth','1'); }catch(e){}
+    } else {
+      err.textContent = 'Wrong email or password.'; err.style.display = 'block';
+    }
+  }catch(e){
+    err.textContent = 'Needs a secure context (open via https / GitHub Pages).'; err.style.display = 'block';
+  }
+}
+function unlock(){ document.body.classList.remove('locked'); }
+function checkSession(){ try{ if(sessionStorage.getItem('piyush_auth')==='1') unlock(); }catch(e){} }
+function logout(){ try{ sessionStorage.removeItem('piyush_auth'); }catch(e){} location.reload(); }
+checkSession();
+
+// ═══════════════════════ TAB SWITCHING ═══════════════════════
+function switchTab(tab, btn){
+  document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+tab).classList.add('active');
+  if(btn) btn.classList.add('active');
+  window.scrollTo(0,0);
+}
+
+// ═══════════════════════ OVERVIEW DATA ═══════════════════════
+const SCORES = [
+  {val:'High',    lbl:'Niche strength<br>tvOS / streaming',     cls:'g-col'},
+  {val:'Gap',     lbl:'Interview readiness<br>DSA · system design', cls:'rd-col'},
+  {val:'Risk',    lbl:'Stability signal<br>4 cos / 24 mo early',  cls:'am-col'},
+  {val:'Medium',  lbl:'AI resilience<br>moat vs. generalist',     cls:'am-col'},
+];
+function renderScores(){
+  document.getElementById('score-strip').innerHTML = SCORES.map(s=>
+    `<div class="sc"><div class="sc-val ${s.cls}">${s.val}</div><div class="sc-lbl">${s.lbl}</div></div>`).join('');
+}
+
+const SKILLS = [
+  {group:'Core iOS / tvOS — your engine', items:[
+    {l:'tvOS Focus Engine',v:9},
+    {l:'Swift / SwiftUI',v:8},
+    {l:'StoreKit 2 (subscriptions)',v:8},
+    {l:'UIKit',v:7},
+    {l:'KMP ↔ native bridging',v:7},
+    {l:'AVPlayer / media playback',v:6},
+    {l:'Core Bluetooth (BLE)',v:6},
+  ]},
+  {group:'Engineering maturity — the exposed flank', items:[
+    {l:'Architecture at scale',v:5},
+    {l:'Swift Concurrency (actors)',v:4},
+    {l:'iOS system design',v:3},
+    {l:'DSA / fundamentals',v:3},
+    {l:'Testing (XCTest / snapshot)',v:2},
+    {l:'CI/CD (Fastlane / Xcode Cloud)',v:2},
+  ]},
+  {group:'Career signals — what the market sees', items:[
+    {l:'AI-assisted velocity',v:5},
+    {l:'Written comms / design docs',v:4},
+    {l:'Tenure / stability',v:3},
+    {l:'Public footprint (GitHub/blog)',v:2},
+    {l:'On-device ML / Core ML',v:2},
+  ]},
+];
+function barClass(v){ return v>=7?'dbg':v>=5?'dba':'dbr'; }
+function renderSkills(){
+  document.getElementById('skills-root').innerHTML = SKILLS.map(grp=>
+    `<div class="dim-wrap"><div class="dim-group-label">${grp.group}</div>${
+      grp.items.map(it=>`<div class="dim-row">
+        <div class="dim-lbl">${it.l}</div>
+        <div class="dim-bar-bg"><div class="dim-bar ${barClass(it.v)}" style="width:${it.v*10}%"></div></div>
+        <div class="dim-score">${it.v}/10</div>
+      </div>`).join('')
+    }</div>`).join('');
+}
+
+const GAPS = [
+  {b:'red',bt:'pattern',t:'The job-hopping is a pattern, not a blip',body:'Four companies in 24 months (Feb 2022–Feb 2024), none over ~10 months. Tantech (22 mo) repairs it; you\'re 4 mo into Logituit. <strong>You haven\'t yet proven you can stay 3+ years and reach real seniority.</strong> Have a true answer ready.'},
+  {b:'amber',bt:'identity',t:'Breadth is hiding your depth',body:'ECG, smart home, e-commerce, OTT, reels, KMP — looks like range, reads like a tour. <strong>tvOS focus-engine work is your only genuine depth.</strong> Narrow the story, don\'t widen it.'},
+  {b:'red',bt:'interview',t:'The interview is where you\'re exposed',body:'The niche gets you in the door; <strong>DSA, iOS system design, and Swift Concurrency can drop the floor out.</strong> Right now your resume writes cheques the interview may not cash.'},
+  {b:'amber',bt:'proof',t:'No public proof of any of it',body:'No GitHub presence, no writing. <strong>A blog post on the focus-engine trap + one small OSS Swift package</strong> would differentiate you more than any resume line.'},
+  {b:'amber',bt:'rigor',t:'No testing / CI-CD signal',body:'Nothing in your history shows XCTest, snapshot tests, Fastlane, or Xcode Cloud — and senior media roles ask for it. <strong>Add real testing + one pipeline</strong> to a single project.'},
+  {b:'amber',bt:'calibration',t:'Solo-dev calibration risk',body:'Mostly solo / informal-lead roles at small startups means <strong>you may never have been calibrated against a strong senior or a mature codebase.</strong> Blind spots you can\'t see yet.'},
+];
+function renderGaps(){
+  const cls={red:'bg-r',amber:'bg-a',green:'bg-g',blue:'bg-b'};
+  document.getElementById('gaps-root').innerHTML = GAPS.map(g=>
+    `<div class="gc"><div class="gc-head"><span class="badge ${cls[g.b]}">${g.bt}</span><div class="gc-title">${g.t}</div></div><div class="gc-body">${g.body}</div></div>`).join('');
+}
+
+// ═══════════════════════ ROADMAP ═══════════════════════
+const ROADMAP = [
+  {p:'p0',dot:'NOW',title:'Quick wins',when:'this week',goal:'Stop leaving free points on the table.',items:[
+    '<strong>Fill real contact details</strong> into resume + portfolio, then deploy the site (GitHub Pages / Vercel).',
+    '<strong>Fix LinkedIn headline</strong> to your niche: "iOS / tvOS Engineer — OTT &amp; Streaming".',
+    '<strong>Quantify resume bullets</strong> — crash-free %, perf numbers, subscription/revenue impact, even rough internal figures.',
+    '<strong>Collapse the Mirrorsize app list</strong> into one line; spend the space on distinct work.',
+  ]},
+  {p:'p1',dot:'3 MO',title:'Visibility &amp; AI velocity',when:'months 1–3',goal:'Pick the moat, go public, get fast.',items:[
+    '<strong>Publish a technical writeup</strong> on the tvOS focus-engine trap + the RTL-inheritance bug. Almost nobody writes this.',
+    '<strong>Ship one small open-source Swift package</strong> (a sanitized focus-management helper) with a real README.',
+    '<strong>Build with AI, not just debug.</strong> Get genuinely fast with Claude Code / Cursor so you ship more scope than peers.',
+    '<strong>Adopt the specialist identity</strong> everywhere: "tvOS / streaming specialist", not "iOS generalist".',
+    'Start a steady <strong>DSA refresher</strong> (a few problems a week — compounding, not cramming).',
+  ]},
+  {p:'p2',dot:'6 MO',title:'Depth &amp; systems',when:'months 4–6',goal:'Move from features to systems.',items:[
+    '<strong>Own a subsystem end-to-end</strong> at Logituit — not just tickets.',
+    '<strong>Learn iOS system design</strong> properly: offline caching, video pipeline architecture, trade-offs.',
+    '<strong>Add a real test suite + one CI/CD pipeline</strong> (XCTest/snapshot + Fastlane or Xcode Cloud) so you can speak to it.',
+    '<strong>Swift Concurrency deep dive</strong>: actors, structured concurrency, async sequences.',
+    '<strong>Start Core ML / Apple Intelligence</strong> — your Mirrorsize ML-adjacent past gives you a credible thread. Be early.',
+    '<strong>Write design docs / detailed PRs</strong> at work — build the written-comms muscle.',
+  ]},
+  {p:'p3',dot:'12 MO',title:'Senior positioning',when:'months 7–12',goal:'Read as senior-track — and finally have a stability story.',items:[
+    '<strong>Demonstrated system ownership</strong> + a real public footprint (posts, OSS with a little traction).',
+    '<strong>Mentor a junior / run code reviews</strong> — seniority is partly leverage on others.',
+    '<strong>~2 years tenure forming</strong> — the hopping story becomes a stability story.',
+    '<strong>Make the move:</strong> get leveled-up at Logituit, or take a senior product role at a real comp jump.',
+  ]},
+];
+function renderRoadmap(){
+  const root=document.getElementById('roadmap-root');
+  root.innerHTML = '<div class="rm-line"></div>' + ROADMAP.map(r=>
+    `<div class="rm-item">
+      <div class="rm-dot ${r.p}">${r.dot}</div>
+      <div class="rm-card">
+        <div class="rm-head"><div class="rm-title">${r.title}</div><div class="rm-when">${r.when}</div></div>
+        <div class="rm-goal">${r.goal}</div>
+        <ul class="rm-list">${r.items.map(i=>`<li>${i}</li>`).join('')}</ul>
+      </div>
+    </div>`).join('');
+}
+
+// ═══════════════════════ AI & MOAT ═══════════════════════
+const AICARDS = [
+  {b:'red',bt:'most exposed',t:'The commoditised layer',body:'Figma-to-SwiftUI, CRUD screens, Codable models, standard networking, e-commerce flows — <strong>exactly your Mirrorsize / Tantech years.</strong> Well-represented in training data, easy to verify, already automated. Its market price is falling and the mid-level "implementer" seat count is shrinking.'},
+  {b:'green',bt:'your moat',t:'The device-bound layer',body:'<strong>tvOS focus engine, Instruments profiling, threading/memory bugs, video pipeline tuning, StoreKit edge cases, BLE timing.</strong> Under-documented and empirical — AI hallucinates and wastes your time here. This is the work that holds value. Go deep, go public.'},
+  {b:'blue',bt:'ride the wave',t:'On-device AI is growing iOS',body:'Core ML, Apple Intelligence, on-device ML integration is a genuine growth area inside iOS. Your AI-body-measurement background at Mirrorsize is a <strong>credible thread to pull.</strong> Being early here is a positioning edge, not just a skill.'},
+  {b:'amber',bt:'the real risk',t:'Staying in the middle',body:'The people who get hurt are <strong>mid-level generalists.</strong> The winners are deep specialists AI can\'t replicate + seniors who use AI to take on more scope. You have the raw material for the first — but your career <em>pattern</em> points toward the risk group. Climb, fast.'},
+];
+function renderAI(){
+  const cls={red:'bg-r',amber:'bg-a',green:'bg-g',blue:'bg-b'};
+  document.getElementById('ai-root').innerHTML = AICARDS.map(g=>
+    `<div class="gc"><div class="gc-head"><span class="badge ${cls[g.b]}">${g.bt}</span><div class="gc-title">${g.t}</div></div><div class="gc-body">${g.body}</div></div>`).join('');
+}
+
+// ═══════════════════════ CHECKLIST ═══════════════════════
+const CHECKLIST_DEF = [
+  {group:'Now — quick wins', items:[
+    {id:'n1',label:'Fill real contact details into resume + portfolio',meta:'email · phone · LinkedIn · GitHub · 5 min',tag:'ship',t:'t-build'},
+    {id:'n2',label:'Deploy portfolio site (GitHub Pages / Vercel)',meta:'keep index.html + resume.docx together · 20 min',tag:'ship',t:'t-build'},
+    {id:'n3',label:'Rewrite LinkedIn headline to the niche',meta:'"iOS / tvOS Engineer — OTT & Streaming" · 5 min',tag:'brand',t:'t-apply'},
+    {id:'n4',label:'Add quantified impact to every resume bullet',meta:'crash-free %, perf, subscription/revenue numbers · 45 min',tag:'resume',t:'t-res'},
+    {id:'n5',label:'Collapse the Mirrorsize app list to one line',meta:'"10+ shipped apps on a shared AI-sizing platform" · 10 min',tag:'resume',t:'t-res'},
+    {id:'n6',label:'Decide how to present dormant/freelance apps honestly',meta:'past tense + date; never imply current involvement',tag:'resume',t:'t-res'},
+  ]},
+  {group:'3 months — visibility & AI velocity', items:[
+    {id:'a1',label:'Publish blog post: the tvOS focus-engine trap + RTL bug',meta:'highest-leverage differentiator · ~6 hrs',tag:'build',t:'t-build'},
+    {id:'a2',label:'Ship one small open-source Swift package + README',meta:'sanitized focus-management helper',tag:'build',t:'t-build'},
+    {id:'a3',label:'Clean up GitHub profile: bio, pinned repos, links',meta:'30 min',tag:'build',t:'t-build'},
+    {id:'a4',label:'Get fast with Claude Code / Cursor — build, not just debug',meta:'measure: ship more scope per sprint',tag:'ai',t:'t-learn'},
+    {id:'a5',label:'Start steady DSA practice (a few problems/week)',meta:'compounding, not cramming',tag:'learn',t:'t-learn'},
+  ]},
+  {group:'6 months — depth & systems', items:[
+    {id:'b1',label:'Own one subsystem end-to-end at Logituit',meta:'not tickets — a system you\'re accountable for',tag:'work',t:'t-build'},
+    {id:'b2',label:'Study iOS system design (offline cache, video pipeline)',meta:'the round most likely to filter you',tag:'learn',t:'t-learn'},
+    {id:'b3',label:'Add a real test suite to one project',meta:'XCTest + snapshot tests',tag:'rigor',t:'t-build'},
+    {id:'b4',label:'Set up one CI/CD pipeline',meta:'Fastlane or Xcode Cloud',tag:'rigor',t:'t-build'},
+    {id:'b5',label:'Swift Concurrency deep dive: actors, structured concurrency',meta:'interview + real-world relevance',tag:'learn',t:'t-learn'},
+    {id:'b6',label:'Start Core ML / Apple Intelligence exploration',meta:'ride the on-device AI wave · your ML-adjacent past helps',tag:'ai',t:'t-learn'},
+    {id:'b7',label:'Write design docs / detailed PRs at work',meta:'build the written-comms muscle',tag:'work',t:'t-build'},
+  ]},
+  {group:'12 months — senior positioning', items:[
+    {id:'c1',label:'Demonstrate system ownership you can talk about',meta:'a story with your name on the architecture',tag:'work',t:'t-build'},
+    {id:'c2',label:'Establish a public footprint (posts + OSS traction)',meta:'2–3 posts, a repo people use',tag:'build',t:'t-build'},
+    {id:'c3',label:'Mentor a junior / run code reviews',meta:'seniority = leverage on others',tag:'work',t:'t-build'},
+    {id:'c4',label:'Cross the ~2-year tenure line (stability story)',meta:'the hopping narrative dissolves here',tag:'goal',t:'t-apply'},
+    {id:'c5',label:'Make the move: level-up at Logituit OR senior role + comp jump',meta:'decide from strength, not restlessness',tag:'goal',t:'t-apply'},
+  ]},
+];
+const TAG_COLORS = {
+  't-res':'background:rgba(79,126,245,.1);color:var(--acc2)',
+  't-apply':'background:rgba(224,69,69,.1);color:var(--rd)',
+  't-build':'background:rgba(40,200,122,.1);color:var(--g)',
+  't-learn':'background:rgba(224,154,26,.1);color:var(--am)',
+};
+let clState = {};
+async function loadChecklist(){ clState = await storeLoad(SK.cl, {}); renderChecklist(); }
+function renderChecklist(){
+  const root=document.getElementById('checklist-root');
+  let total=0, done=0, html='';
+  CHECKLIST_DEF.forEach(group=>{
+    let gTotal=0, gDone=0;
+    const rows = group.items.map(item=>{
+      total++; gTotal++;
+      const isDone=!!clState[item.id];
+      if(isDone){done++;gDone++;}
+      return `<div class="cl-item${isDone?' done':''}" onclick="toggleCheck('${item.id}')">
+        <div class="cl-cb"><svg class="cl-cb-tick" viewBox="0 0 8 8" fill="none"><polyline points="1,4 3,6 7,2" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="cl-text"><div class="cl-label">${item.label}<span class="cl-tag" style="${TAG_COLORS[item.t]||''}">${item.tag}</span></div><div class="cl-meta">${item.meta}</div></div>
+      </div>`;
+    }).join('');
+    html += `<div class="cl-group"><div class="cl-group-title"><span>${group.group}</span><span>${gDone}/${gTotal}</span></div>${rows}</div>`;
+  });
+  root.innerHTML = html;
+  const pct = total ? Math.round(done/total*100) : 0;
+  document.getElementById('cl-progress-text').textContent = `${done} / ${total} completed`;
+  document.getElementById('cl-progress-pct').textContent = pct+'%';
+  document.getElementById('cl-progress-fill').style.width = pct+'%';
+}
+async function toggleCheck(id){ clState[id]=!clState[id]; await storeSave(SK.cl, clState); renderChecklist(); }
+async function resetProgress(){
+  if(!confirm('Reset all checked items? Your notes stay.')) return;
+  clState={}; await storeSave(SK.cl, clState); renderChecklist();
+}
+
+// ═══════════════════════ LEARNING CURRICULUM ═══════════════════════
+const LEARNING_DEF = [
+  {group:'iOS/tvOS · Swift language', items:[
+    {id:'l1',label:'Value vs reference semantics',tag:'must',t:'t-apply',subs:['struct vs class vs enum','copy-on-write internals','mutating methods','identity (===) vs equality (==)','when to prefer value types']},
+    {id:'l2',label:'Protocols & generics',tag:'must',t:'t-apply',subs:['protocol requirements & default impls','associated types','generic constraints (where)','some vs any','opaque return types','protocol-oriented design']},
+    {id:'l3',label:'Memory management',tag:'must',t:'t-apply',subs:['ARC & reference counting','strong / weak / unowned','retain cycles in closures','capture lists [weak self]','weak vs unowned trade-offs','memory graph debugging']},
+    {id:'l4',label:'Closures & higher-order functions',tag:'must',t:'t-apply',subs:['escaping vs non-escaping','capture semantics','@autoclosure','map / filter / reduce / compactMap','trailing closure syntax']},
+    {id:'l5',label:'Error handling',tag:'grow',t:'t-learn',subs:['throws / try / catch','Result type','typed throws (Swift 6)','defer','rethrows','try? and try!']},
+    {id:'l6',label:'Property wrappers, result builders & macros',tag:'grow',t:'t-learn',subs:['custom property wrapper','projectedValue ($)','result builders (buildBlock)','Swift macros','how @State is built']},
+  ]},
+  {group:'iOS/tvOS · Concurrency', items:[
+    {id:'l7',label:'async / await fundamentals',tag:'must',t:'t-apply',subs:['async functions & await','suspension points','withCheckedContinuation','converting completion handlers','MainActor hops']},
+    {id:'l8',label:'Structured concurrency',tag:'must',t:'t-apply',subs:['Task vs Task.detached','TaskGroup / withTaskGroup','async let','cancellation & isCancelled','task priorities','task-local values']},
+    {id:'l9',label:'Actors & isolation',tag:'must',t:'t-apply',subs:['actor basics & reentrancy','@MainActor','nonisolated','Sendable & @Sendable','global actors','data-race safety model']},
+    {id:'l10',label:'AsyncSequence / AsyncStream',tag:'grow',t:'t-learn',subs:['AsyncStream / AsyncThrowingStream','for await loops','bridging delegates to streams','buffering policies','cancellation handling']},
+    {id:'l11',label:'Combine',tag:'grow',t:'t-learn',subs:['Publisher / Subscriber / Subject','operators (map/flatMap/debounce)','backpressure & demand','schedulers','store in cancellables','bridging to async']},
+    {id:'l12',label:'GCD & Operation (legacy)',tag:'solidify',t:'t-build',subs:['serial vs concurrent queues','main vs global queues','DispatchGroup / barrier','OperationQueue & dependencies','QoS classes','deadlock pitfalls']},
+    {id:'l13',label:'Swift 6 strict concurrency',tag:'grow',t:'t-learn',subs:['complete concurrency checking','isolation regions','migrating ObservableObject','fixing Sendable warnings','common compiler errors']},
+  ]},
+  {group:'iOS/tvOS · SwiftUI', items:[
+    {id:'l14',label:'State & data flow',tag:'must',t:'t-apply',subs:['@State / @Binding','@StateObject vs @ObservedObject','@EnvironmentObject / @Environment','ownership rules','single source of truth']},
+    {id:'l15',label:'Observation framework',tag:'grow',t:'t-learn',subs:['@Observable macro','@Bindable','migration from ObservableObject','fine-grained invalidation','tracking semantics']},
+    {id:'l16',label:'View identity, lifecycle & diffing',tag:'must',t:'t-apply',subs:['structural vs explicit identity','correct use of .id()','onAppear / onDisappear','EquatableView','avoiding redraws','@State init pitfalls']},
+    {id:'l17',label:'Layout system',tag:'grow',t:'t-learn',subs:['layout priority & sizing','GeometryReader (and its cost)','alignment guides','custom Layout protocol','ViewThatFits','fixedSize / frame']},
+    {id:'l18',label:'Animations & transitions',tag:'solidify',t:'t-build',subs:['implicit vs withAnimation','transitions','matchedGeometryEffect','PhaseAnimator','KeyframeAnimator','animatableData']},
+    {id:'l19',label:'Navigation',tag:'must',t:'t-apply',subs:['NavigationStack & path','NavigationSplitView','navigationDestination','programmatic navigation','deep-link routing','sheets & popovers']},
+    {id:'l20',label:'Lists & scrolling',tag:'solidify',t:'t-build',subs:['List vs LazyVStack','ForEach & identity','scrollPosition / scrollTo','scrollTargetBehavior','pull-to-refresh','sections']},
+    {id:'l21',label:'Reusable components',tag:'grow',t:'t-learn',subs:['custom ViewModifier','PreferenceKey (child to parent)','ButtonStyle / LabelStyle','custom environment values','generic views']},
+    {id:'l22',label:'Drawing',tag:'solidify',t:'t-build',subs:['Shape & Path','Canvas','GraphicsContext','gradients & masks','blend modes']},
+    {id:'l23',label:'UIKit interop',tag:'solidify',t:'t-build',subs:['UIViewRepresentable','UIViewControllerRepresentable','Coordinator pattern','UIHostingController','update lifecycle','intrinsic sizing']},
+  ]},
+  {group:'iOS/tvOS · UIKit & tvOS', items:[
+    {id:'l24',label:'View controller lifecycle & containment',tag:'must',t:'t-apply',subs:['viewDidLoad to viewDidAppear order','will/did appear & disappear','child VC containment','addChild / didMove','loading vs appearing']},
+    {id:'l25',label:'Auto Layout',tag:'must',t:'t-apply',subs:['constraints & anchors','priorities','hugging & compression resistance','UIStackView','intrinsic content size','safe area','debugging conflicts']},
+    {id:'l26',label:'UICollectionView',tag:'grow',t:'t-learn',subs:['compositional layout','sections / groups / items','diffable data source','supplementary views','self-sizing cells','prefetching']},
+    {id:'l27',label:'Core Animation',tag:'grow',t:'t-learn',subs:['CALayer hierarchy','implicit vs explicit animations','CABasicAnimation / keyframe','CAAnimationGroup','transforms & anchorPoint','model vs presentation layer']},
+    {id:'l28',label:'Gestures & touch handling',tag:'solidify',t:'t-build',subs:['recognizer types','simultaneous recognition','allowedTouchTypes (.indirect)','UIPanGestureRecognizer','hit testing','resolving conflicts']},
+    {id:'l29',label:'tvOS focus engine',tag:'solidify',t:'t-build',subs:['focus update lifecycle','UIFocusGuide','preferredFocusEnvironments','focusable() in SwiftUI','@FocusState','focus-trap patterns','RTL / spatial pitfalls']},
+    {id:'l30',label:'tvOS platform specifics',tag:'grow',t:'t-learn',subs:['top shelf extension','Siri remote handling','parallax layered images','focus appearance','TVMLKit basics']},
+  ]},
+  {group:'iOS/tvOS · Architecture', items:[
+    {id:'l31',label:'Architecture patterns',tag:'must',t:'t-apply',subs:['MVC and the massive-VC problem','MVVM bindings','VIPER modules','Clean Architecture layers','choosing per feature','testability impact']},
+    {id:'l32',label:'The Composable Architecture (TCA)',tag:'grow',t:'t-learn',subs:['State / Action / Reducer','Store & ViewStore','effects','dependencies','why teams adopt it']},
+    {id:'l33',label:'Coordinator pattern & routing',tag:'grow',t:'t-learn',subs:['coordinator responsibilities','app vs flow coordinators','child coordinators','decoupling navigation','deep-link handling']},
+    {id:'l34',label:'Dependency injection',tag:'must',t:'t-apply',subs:['constructor vs property injection','protocol abstractions','DI containers','environment-based DI','injecting for tests']},
+    {id:'l35',label:'Modularization',tag:'grow',t:'t-learn',subs:['SPM local packages','feature modules','interface vs implementation split','build-time decoupling','avoiding circular deps']},
+    {id:'l36',label:'SDK / library design',tag:'grow',t:'t-learn',subs:['public vs internal API','access control','semantic versioning','backward compatibility','DocC documentation','XCFramework distribution']},
+  ]},
+  {group:'iOS/tvOS · Networking & data', items:[
+    {id:'l37',label:'URLSession deep dive',tag:'must',t:'t-apply',subs:['data / upload / download tasks','async URLSession APIs','background sessions','URLSessionConfiguration','retries & timeouts','auth challenges']},
+    {id:'l38',label:'Codable advanced',tag:'must',t:'t-apply',subs:['CodingKeys','nested containers','custom init(from:)','polymorphic decoding','dynamic keys','date strategies','handling nulls (FlexibleDate)']},
+    {id:'l39',label:'Realtime: WebSocket & SSE',tag:'solidify',t:'t-build',subs:['URLSessionWebSocketTask','SSE parsing','reconnection & backoff','heartbeat / ping','message ordering','auth on connect']},
+    {id:'l40',label:'GraphQL basics',tag:'grow',t:'t-learn',subs:['queries vs mutations','schema & types','fragments','Apollo iOS basics','when it beats REST']},
+    {id:'l41',label:'Local persistence',tag:'must',t:'t-apply',subs:['UserDefaults & its limits','Keychain (secure storage)','FileManager & the sandbox','plist / JSON files','data protection classes']},
+    {id:'l42',label:'Core Data & SwiftData',tag:'grow',t:'t-learn',subs:['NSManagedObjectContext','main vs background contexts','fetch requests & predicates','lightweight migrations','SwiftData @Model','concurrency rules']},
+    {id:'l43',label:'Caching & image loading',tag:'grow',t:'t-learn',subs:['memory + disk cache layers','NSCache','eviction policy','prefetch & cancellation','SDWebImage pipeline','decode off main thread']},
+    {id:'l44',label:'Offline-first & sync',tag:'grow',t:'t-learn',subs:['local-first writes','queueing mutations','conflict resolution','delta / sync tokens','reachability handling']},
+  ]},
+  {group:'iOS/tvOS · Media & streaming (your domain)', items:[
+    {id:'l45',label:'AVFoundation core',tag:'must',t:'t-apply',subs:['AVAsset / AVURLAsset','AVPlayerItem & status KVO','AVPlayer & AVQueuePlayer','time observers','AVPlayerLayer','async asset loading']},
+    {id:'l46',label:'Playback UI',tag:'solidify',t:'t-build',subs:['AVPlayerViewController','custom transport controls','scrubbing & seek','buffering states','tvOS overlay controls']},
+    {id:'l47',label:'Adaptive streaming',tag:'must',t:'t-apply',subs:['HLS manifests (m3u8)','variant playlists & ABR','DASH overview','live vs VOD','bitrate switching','low-latency HLS']},
+    {id:'l48',label:'DRM',tag:'grow',t:'t-learn',subs:['FairPlay Streaming','AVContentKeySession','license / key exchange','SPC and CKC flow','persistent keys']},
+    {id:'l49',label:'Offline playback',tag:'grow',t:'t-learn',subs:['AVAssetDownloadTask','AVAssetDownloadURLSession','managing storage','renewing licenses','resume / cancel downloads']},
+    {id:'l50',label:'PiP, AirPlay & Now Playing',tag:'grow',t:'t-learn',subs:['AVPictureInPictureController','AirPlay / external playback','MPNowPlayingInfoCenter','MPRemoteCommandCenter','background audio mode','interruptions & route changes']},
+    {id:'l51',label:'Captions & multi-track audio',tag:'solidify',t:'t-build',subs:['AVMediaSelectionGroup','subtitle / CC selection','audio track selection','caption styling','accessibility']},
+    {id:'l52',label:'Google Cast / Chromecast',tag:'solidify',t:'t-build',subs:['GCKSessionManager','media load & control','custom receiver basics','INVALID_MEDIA_SESSION_ID pitfalls','reconnection']},
+  ]},
+  {group:'iOS/tvOS · StoreKit', items:[
+    {id:'l53',label:'StoreKit 2',tag:'solidify',t:'t-build',subs:['Product & purchase()','Transaction & verification','subscription status & renewal','restore via currentEntitlements','intro / promo offers','manageSubscriptions','per-storefront pricing']},
+    {id:'l54',label:'Server-side validation',tag:'grow',t:'t-learn',subs:['App Store Server API','server notifications v2','JWS verification','entitlement source of truth','grace periods & billing retry']},
+  ]},
+  {group:'iOS/tvOS · Performance & debugging', items:[
+    {id:'l55',label:'Instruments',tag:'must',t:'t-apply',subs:['Time Profiler','Allocations & Leaks','Core Animation (FPS)','Hangs','os_signpost','SwiftUI instrument']},
+    {id:'l56',label:'Memory graph debugger',tag:'grow',t:'t-learn',subs:['capture memory graph','spot retain cycles','malloc stack logging','leaks in closures']},
+    {id:'l57',label:'Launch time & app size',tag:'grow',t:'t-learn',subs:['pre-main vs post-main','dyld & static init cost','deferring startup work','app thinning / on-demand resources','binary size analysis']},
+    {id:'l58',label:'Rendering performance',tag:'grow',t:'t-learn',subs:['frame hitches','offscreen rendering','blending & overdraw','work off the main thread','image decode cost','async drawing']},
+    {id:'l59',label:'LLDB',tag:'grow',t:'t-learn',subs:['symbolic & conditional breakpoints','po / p / expression','watchpoints','frame variable','thread & backtrace navigation']},
+    {id:'l60',label:'Crash analysis',tag:'grow',t:'t-learn',subs:['symbolication & dSYMs','reading crash logs','MetricKit diagnostics','Crashlytics setup','non-fatal logging']},
+  ]},
+  {group:'iOS/tvOS · Testing', items:[
+    {id:'l61',label:'XCTest',tag:'must',t:'t-apply',subs:['XCTestCase structure','assertions','async tests (await)','XCTestExpectation','setUp / tearDown','performance (measure)']},
+    {id:'l62',label:'Swift Testing',tag:'grow',t:'t-learn',subs:['@Test & #expect','parameterized tests','traits & tags','test suites','migrating from XCTest']},
+    {id:'l63',label:'Mocking & DI for tests',tag:'must',t:'t-apply',subs:['protocol-based mocks','spies / stubs / fakes','injecting dependencies','testing async code','abstracting time / clock']},
+    {id:'l64',label:'UI testing (XCUITest)',tag:'grow',t:'t-learn',subs:['XCUIApplication','element queries','page object pattern','waiting for elements','reducing flakiness']},
+    {id:'l65',label:'Snapshot testing',tag:'grow',t:'t-learn',subs:['reference image capture','tolerance & diffing','per-device snapshots','catching visual regressions']},
+  ]},
+  {group:'iOS/tvOS · Tooling & release', items:[
+    {id:'l66',label:'Git advanced',tag:'must',t:'t-apply',subs:['interactive rebase','cherry-pick','bisect','reflog recovery','hooks (and the security risk)','complex conflict resolution']},
+    {id:'l67',label:'Xcode build system',tag:'grow',t:'t-learn',subs:['targets & schemes','build configurations','xcconfig files','build settings levels','build phases','compilation conditions']},
+    {id:'l68',label:'SPM authoring',tag:'grow',t:'t-learn',subs:['Package.swift manifest','targets & products','local packages','binary targets (XCFramework)','bundling resources','version tags']},
+    {id:'l69',label:'Fastlane',tag:'grow',t:'t-learn',subs:['lanes & actions','build & sign (gym)','TestFlight upload (pilot)','code signing (match)','screenshots (snapshot)']},
+    {id:'l70',label:'CI/CD',tag:'must',t:'t-apply',subs:['Xcode Cloud workflows','GitHub Actions for iOS','caching dependencies','running tests in CI','signing in CI','release automation']},
+    {id:'l71',label:'Code signing & distribution',tag:'grow',t:'t-learn',subs:['certificates & identities','provisioning profiles','entitlements','TestFlight distribution','App Store submission','export compliance']},
+  ]},
+  {group:'iOS/tvOS · System design', items:[
+    {id:'l72',label:'Design an offline-capable client',tag:'must',t:'t-apply',subs:['cache + source of truth','write queue & retry','sync & conflict policy','optimistic UI','reachability','eviction strategy']},
+    {id:'l73',label:'Design an image loading / caching library',tag:'grow',t:'t-learn',subs:['memory + disk tiers','request dedup','prefetch & cancellation','decode off main','cache key & expiry','LRU eviction']},
+    {id:'l74',label:'Design a video streaming client',tag:'must',t:'t-apply',subs:['player abstraction','ABR & buffering','preload / prefetch','DRM integration','QoE analytics','error recovery']},
+    {id:'l75',label:'Design a feed / reels architecture',tag:'grow',t:'t-learn',subs:['cell & player recycling','prefetch next items','playback handoff on scroll','memory budget','pagination','autoplay rules']},
+    {id:'l76',label:'Design a real-time updates system',tag:'grow',t:'t-learn',subs:['socket connection management','diff / patch model','reconnect & resync','ordering & dedup','presence / typing']},
+    {id:'l77',label:'Pagination & infinite scroll',tag:'solidify',t:'t-build',subs:['cursor vs offset','prefetch threshold','stable ids & dedup','page error / retry','jump to top']},
+    {id:'l78',label:'Deep linking & universal links',tag:'grow',t:'t-learn',subs:['URL scheme vs universal links','apple-app-site-association','routing to screens','deferred deep links','cold-start handling']},
+    {id:'l79',label:'Push notifications architecture',tag:'grow',t:'t-learn',subs:['APNs & device tokens','rich push (service extension)','silent push','foreground vs background handling','payload design at scale']},
+    {id:'l80',label:'Feature flags & A/B testing',tag:'grow',t:'t-learn',subs:['remote config','flag evaluation','gradual rollout','experiment assignment','kill switches']},
+  ]},
+  {group:'iOS/tvOS · On-device ML & quality', items:[
+    {id:'l81',label:'Core ML',tag:'grow',t:'t-learn',subs:['model integration (.mlmodel)','Core ML Tools conversion','prediction API','on-device inference','updatable models']},
+    {id:'l82',label:'Vision framework',tag:'grow',t:'t-learn',subs:['VNRequest & handlers','face / text / object detection','tracking','pairing with Core ML','camera pipeline']},
+    {id:'l83',label:'Apple Intelligence / Foundation Models',tag:'grow',t:'t-learn',subs:['on-device Foundation Models API','guided generation','tool calling','Writing Tools / Image Playground','privacy model']},
+    {id:'l84',label:'Accessibility',tag:'must',t:'t-apply',subs:['VoiceOver labels / hints / traits','Dynamic Type','accessibility actions','contrast & reduce motion','Accessibility Inspector']},
+    {id:'l85',label:'Localization & i18n',tag:'solidify',t:'t-build',subs:['String Catalogs (.xcstrings)','pluralization & format args','RTL layout','locale-aware dates / numbers','exporting for translation']},
+  ]},
+
+  {group:'DSA · Foundations', items:[
+    {id:'d1',label:'Complexity analysis',tag:'must',t:'t-apply',subs:['Big-O and Big-Theta','time vs space','amortized analysis','common complexity classes','recursion / call-stack cost']},
+    {id:'d2',label:'Arrays & strings',tag:'must',t:'t-apply',subs:['in-place manipulation','prefix sums','Kadane (max subarray)','string parsing','two-pass techniques']},
+    {id:'d3',label:'Hashing',tag:'must',t:'t-apply',subs:['hash map / set usage','frequency maps','grouping (anagrams)','collision intuition','average vs worst case']},
+    {id:'d4',label:'Two pointers',tag:'must',t:'t-apply',subs:['opposite ends','same direction','sorted-array pair sums','partitioning','removing duplicates']},
+    {id:'d5',label:'Sliding window',tag:'must',t:'t-apply',subs:['fixed-size window','variable window','longest / shortest substring','window with hashmap','at-most-K pattern']},
+  ]},
+  {group:'DSA · Data structures', items:[
+    {id:'d6',label:'Linked lists',tag:'must',t:'t-apply',subs:['traversal & dummy nodes','reverse a list','fast / slow pointers','cycle detection (Floyd)','merge two lists','find middle / reorder']},
+    {id:'d7',label:'Stacks & queues',tag:'must',t:'t-apply',subs:['stack basics','monotonic stack','queue & deque','queue from two stacks','next greater element','valid parentheses']},
+    {id:'d8',label:'Binary trees',tag:'must',t:'t-apply',subs:['DFS pre / in / post','BFS / level order','recursion templates','height & diameter','path sum','lowest common ancestor']},
+    {id:'d9',label:'Binary search trees',tag:'grow',t:'t-learn',subs:['BST property','insert & delete','validate BST','in-order gives sorted','kth smallest']},
+    {id:'d10',label:'Heaps / priority queues',tag:'must',t:'t-apply',subs:['min / max heap','heapify','top-K elements','k-way merge','implement a heap in Swift','two heaps (running median)']},
+    {id:'d11',label:'Tries',tag:'grow',t:'t-learn',subs:['insert & search','prefix queries','autocomplete','word search','memory trade-offs']},
+    {id:'d12',label:'Graphs',tag:'must',t:'t-apply',subs:['adjacency list / matrix','BFS & DFS','connected components','cycle detection','bipartite check','grid as a graph']},
+    {id:'d13',label:'Union-Find',tag:'grow',t:'t-learn',subs:['parent array','find with path compression','union by rank','count components','cycle in undirected graph']},
+  ]},
+  {group:'DSA · Algorithms', items:[
+    {id:'d14',label:'Recursion & backtracking',tag:'must',t:'t-apply',subs:['recursion templates','subsets','permutations','combinations','N-Queens','pruning']},
+    {id:'d15',label:'Sorting',tag:'grow',t:'t-learn',subs:['quicksort (partition)','mergesort','heapsort','stability','custom comparators','counting / bucket sort']},
+    {id:'d16',label:'Binary search variations',tag:'must',t:'t-apply',subs:['classic on sorted array','lower / upper bound','search on answer space','rotated array','first / last occurrence']},
+    {id:'d17',label:'Greedy algorithms',tag:'grow',t:'t-learn',subs:['exchange argument','interval scheduling','activity selection','when greedy fails (vs DP)','jump game']},
+    {id:'d18',label:'Dynamic programming',tag:'must',t:'t-apply',subs:['memoization vs tabulation','1D DP (climb stairs)','2D DP (grid paths)','0/1 knapsack','LIS','edit distance','designing the state']},
+    {id:'d19',label:'Graph algorithms',tag:'grow',t:'t-learn',subs:['topological sort (Kahn / DFS)','Dijkstra (with PQ)','Bellman-Ford intuition','MST: Kruskal / Prim','shortest path in grid (BFS)']},
+    {id:'d20',label:'Bit manipulation',tag:'grow',t:'t-learn',subs:['AND / OR / XOR / shifts','bit masks','single number (XOR)','count set bits','subsets via bitmask']},
+    {id:'d21',label:'Intervals',tag:'solidify',t:'t-build',subs:['sort by start','merge overlapping','insert interval','meeting rooms','overlap counting']},
+    {id:'d22',label:'Matrix / grid problems',tag:'solidify',t:'t-build',subs:['traversal patterns','spiral order','rotate in place','flood fill / islands','BFS / DFS on grid']},
+  ]},
+  {group:'DSA · Swift & interview craft', items:[
+    {id:'d23',label:'DSA in Swift specifically',tag:'must',t:'t-apply',subs:['Array / Set / Dictionary perf','no built-in heap — build one','no deque — index or ring buffer','reserveCapacity','loops vs higher-order','reduce vs mutation']},
+    {id:'d24',label:'Pattern-based practice',tag:'must',t:'t-apply',subs:['Blind 75','NeetCode 150 by pattern','spaced repetition','redo missed problems','categorize by technique']},
+    {id:'d25',label:'Timed mock interviews',tag:'must',t:'t-apply',subs:['practise the 35-minute clock','think out loud','peer / Pramp mocks','handling getting stuck','recovering gracefully']},
+    {id:'d26',label:'Communicating out loud',tag:'must',t:'t-apply',subs:['clarify the problem first','state approach before coding','complexity up front','test with examples','walk edge cases verbally']},
+    {id:'d27',label:'Common iOS coding questions',tag:'grow',t:'t-learn',subs:['what iOS loops actually ask','expected Swift idioms','closures / async questions','memory & ARC questions','occasional UI puzzle']},
+    {id:'d28',label:'Low-level design',tag:'grow',t:'t-learn',subs:['LRU cache','rate limiter','event bus / pub-sub','in-memory key-value store','design tic-tac-toe']},
+  ]},
+];
+
+let learnState = {}, expandState = {};
+async function loadLearning(){ learnState = await storeLoad(SK.learn, {}); renderLearning(); }
+function subId(item,i){ return item.id+'-'+i; }
+function itemStats(item){ let d=0; item.subs.forEach((s,i)=>{ if(learnState[subId(item,i)]) d++; }); return {d, t:item.subs.length}; }
+function findLearnItem(id){ for(const g of LEARNING_DEF){ for(const it of g.items){ if(it.id===id) return it; } } return null; }
+
+function renderLearning(){
+  const root = document.getElementById('learning-root');
+  let iosT=0,iosD=0,dsaT=0,dsaD=0,html='';
+  LEARNING_DEF.forEach(group=>{
+    const isDSA = group.group.indexOf('DSA')===0;
+    let gT=0,gD=0,rows='';
+    group.items.forEach(item=>{
+      const {d,t}=itemStats(item);
+      gT+=t; gD+=d; if(isDSA){dsaT+=t;dsaD+=d;}else{iosT+=t;iosD+=d;}
+      const allDone=d===t, partial=d>0&&d<t, open=!!expandState[item.id];
+      const subsHtml=item.subs.map((s,i)=>{
+        const sd=!!learnState[subId(item,i)];
+        return `<div class="sub-item${sd?' done':''}" onclick="toggleSub('${subId(item,i)}')">
+          <div class="sub-cb"><svg class="tick" viewBox="0 0 8 8" fill="none"><polyline points="1,4 3,6 7,2" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="sub-label">${s}</div>
+        </div>`;
+      }).join('');
+      rows+=`<div class="li-item">
+        <div class="li-head" onclick="toggleExpand('${item.id}')">
+          <span class="li-chevron${open?' open':''}">&#9656;</span>
+          <div class="li-cb${allDone?' done':partial?' partial':''}" onclick="toggleItemAll('${item.id}',event)">
+            <svg class="tick" viewBox="0 0 8 8" fill="none"><polyline points="1,4 3,6 7,2" stroke="white" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span class="dash"></span>
+          </div>
+          <div class="li-text"><div class="li-label${allDone?' done':''}">${item.label}<span class="cl-tag" style="${TAG_COLORS[item.t]||''}">${item.tag}</span></div></div>
+          <div class="li-prog">${d}/${t}</div>
+        </div>
+        <div class="li-subs${open?' open':''}">${subsHtml}</div>
+      </div>`;
+    });
+    html += `<div class="cl-group"><div class="cl-group-title"><span>${group.group}</span><span>${gD}/${gT}</span></div>${rows}</div>`;
+  });
+  root.innerHTML = html;
+  const ip=iosT?Math.round(iosD/iosT*100):0, dp=dsaT?Math.round(dsaD/dsaT*100):0;
+  document.getElementById('ln-ios-pct').textContent = `${iosD}/${iosT} · ${ip}%`;
+  document.getElementById('ln-ios-fill').style.width = ip+'%';
+  document.getElementById('ln-dsa-pct').textContent = `${dsaD}/${dsaT} · ${dp}%`;
+  document.getElementById('ln-dsa-fill').style.width = dp+'%';
+}
+function toggleExpand(id){ expandState[id]=!expandState[id]; renderLearning(); }
+async function toggleSub(sid){ learnState[sid]=!learnState[sid]; await storeSave(SK.learn, learnState); renderLearning(); }
+async function toggleItemAll(id,e){
+  e.stopPropagation();
+  const item=findLearnItem(id); if(!item) return;
+  const {d,t}=itemStats(item); const target=!(d===t);
+  item.subs.forEach((s,i)=>{ learnState[subId(item,i)]=target; });
+  await storeSave(SK.learn, learnState); renderLearning();
+}
+function setAllExpanded(v){ LEARNING_DEF.forEach(g=>g.items.forEach(it=>{ expandState[it.id]=v; })); renderLearning(); }
+async function resetLearning(){
+  if(!confirm('Reset all learning progress?')) return;
+  learnState={}; await storeSave(SK.learn, learnState); renderLearning();
+}
+
+// ═══════════════════════ NOTES ═══════════════════════
+let notesTimer=null;
+async function loadNotes(){
+  const v = await storeLoad(SK.notes, '');
+  document.getElementById('notes-area').value = v || '';
+}
+function wireNotes(){
+  const el=document.getElementById('notes-area');
+  el.addEventListener('input', ()=>{
+    clearTimeout(notesTimer);
+    notesTimer=setTimeout(()=>storeSave(SK.notes, el.value), 600);
+  });
+}
+
+// ═══════════════════════ INIT ═══════════════════════
+document.addEventListener('DOMContentLoaded', async ()=>{
+  renderScores(); renderSkills(); renderGaps(); renderRoadmap(); renderAI();
+  wireNotes();
+  await Promise.all([loadChecklist(), loadNotes(), loadLearning()]);
+});
+</script>
+</body>
+</html>
