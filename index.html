@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Piyush Tiwari | iOS &amp; tvOS Engineer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav>
+    <div class="logo">Piyush Tiwari</div>
+    <ul>
+      <li><a href="#about">About</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#resume">Resume</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- About Section -->
+  <section id="about">
+    <div class="about-container">
+      <div class="about-text">
+        <p class="eyebrow">iOS &amp; tvOS Engineer</p>
+        <h1>Hello, I'm <span>Piyush Tiwari</span> &#128075;</h1>
+        <p>
+          I build for Apple platforms. Over the last ~4 years I've shipped production apps across
+          <strong>OTT / streaming</strong>, <strong>health-tech</strong>, and <strong>e-commerce</strong> &mdash;
+          working in <strong>Swift</strong> and <strong>SwiftUI</strong>, with deep experience in the
+          <strong>tvOS focus engine</strong>, <strong>StoreKit&nbsp;2</strong> subscriptions, live media
+          playback, and <strong>Kotlin Multiplatform</strong> native bridging. I've put 10+ apps on the
+          App Store and built features end to end.
+        </p>
+        <div class="about-cta">
+          <a href="mailto:er.piyush3006@gmail.com" class="btn-primary">Get in touch</a>
+          <a href="#projects" class="btn-ghost">See my work</a>
+        </div>
+      </div>
+
+      <div class="about-img">
+        <!-- <div class="monogram">PT</div> -->
+        <img src="piyush.jpg" alt="Piyush Tiwari">
+      </div>
+    </div>
+  </section>
+
+  <!-- Skills Section -->
+  <section id="skills">
+    <h2>Skills</h2>
+    <div class="skills-grid">
+      <div>Swift</div>
+      <div>SwiftUI</div>
+      <div>UIKit</div>
+      <div>tvOS Focus Engine</div>
+      <div>StoreKit 2</div>
+      <div>AVPlayer / AVKit</div>
+      <div>Combine</div>
+      <div>async / await</div>
+      <div>Core Bluetooth</div>
+      <div>KMP Bridging</div>
+      <div>MVVM</div>
+      <div>Codable</div>
+      <div>WebSocket / SSE</div>
+      <div>Git / GitHub</div>
+    </div>
+  </section>
+
+  <!-- Projects Section -->
+  <section id="projects">
+    <h2 class="fade-in">Projects</h2>
+    <div class="projects-grid">
+
+      <div class="project-card fade-in">
+        <div class="project-banner" style="--c1:#0a84ff;--c2:#5e5ce6">
+          <span class="project-mark">EU</span>
+          <span class="project-plat">iOS &middot; KMP</span>
+        </div>
+        <div class="project-content">
+          <h3>EROS Universe</h3>
+          <p>OTT streaming app built on Kotlin Multiplatform. I own the iOS subscription layer &mdash;
+          StoreKit&nbsp;2 with per-storefront pricing (INR / USD) &mdash; and the native iOS work that shared
+          KMP code can't reach.</p>
+          <div class="tags"><span>StoreKit 2</span><span>Kotlin Multiplatform</span><span>Native bridging</span></div>
+        </div>
+      </div>
+
+      <div class="project-card fade-in">
+        <div class="project-banner" style="--c1:#ff6b35;--c2:#e0245e">
+          <span class="project-mark">MW</span>
+          <span class="project-plat">tvOS &middot; iOS</span>
+        </div>
+        <div class="project-content">
+          <h3>meWatch &mdash; Live Scorecard</h3>
+          <p>A reusable live sports scorecard overlay shown on the TV during matches. Engineered the
+          tricky tvOS focus-engine navigation and scroll restoration, with live commentary streamed over
+          WebSocket / SSE.</p>
+          <div class="tags"><span>SwiftUI</span><span>tvOS Focus Engine</span><span>SDK</span></div>
+        </div>
+      </div>
+
+      <div class="project-card fade-in">
+        <div class="project-banner" style="--c1:#7c3aed;--c2:#0a84ff">
+          <span class="project-mark">SN</span>
+          <span class="project-plat">iOS &middot; tvOS</span>
+        </div>
+        <div class="project-content">
+          <h3>Sun NXT &mdash; Shorts</h3>
+          <p>Sole developer on the short-form vertical video (Reels / Shorts) feature for the Sun NXT
+          OTT platform &mdash; built end to end across <strong>iOS and tvOS</strong> on an AVPlayer-based
+          playback architecture tuned for smooth feed scrolling and prefetching.</p>
+          <div class="tags"><span>AVPlayer</span><span>SwiftUI</span><span>iOS + tvOS</span><span>Sole developer</span></div>
+        </div>
+      </div>
+
+      <div class="project-card fade-in">
+        <div class="project-banner" style="--c1:#00bcd4;--c2:#0a84ff">
+          <span class="project-mark">MS</span>
+          <span class="project-plat">iOS</span>
+        </div>
+        <div class="project-content">
+          <h3>Mirrorsize &mdash; AI Body Sizing</h3>
+          <p>Contributed to 10+ App Store apps on a shared AI body-measurement platform: guided
+          photo-capture, custom-clothing flows, address &amp; payments, and order history. Built with
+          SwiftUI, MVVM, async/await.</p>
+          <div class="tags"><span>SwiftUI</span><span>MVVM</span><span>Stripe / Razorpay</span></div>
+        </div>
+      </div>
+
+      <div class="project-card fade-in">
+        <div class="project-banner" style="--c1:#ef4444;--c2:#f59e0b">
+          <span class="project-mark">SL</span>
+          <span class="project-plat">iOS</span>
+        </div>
+        <div class="project-content">
+          <h3>SanketLife &mdash; Pocket ECG</h3>
+          <p>Companion iOS app for a pocket-sized ECG device: BLE device pairing, guided ECG capture,
+          PDF report export, and cardiologist connect &mdash; plus SDK support for external clients.</p>
+          <div class="tags"><span>Core Bluetooth</span><span>PDF export</span><span>SDK</span></div>
+        </div>
+      </div>
+
+      <div class="project-card fade-in">
+        <div class="project-banner" style="--c1:#10b981;--c2:#0a84ff">
+          <span class="project-mark">RH</span>
+          <span class="project-plat">iOS</span>
+        </div>
+        <div class="project-content">
+          <h3>RUS&Eacute; Homes &mdash; Smart Home</h3>
+          <p>Built the entire iOS app from scratch as the sole developer: a marketplace for smart-home
+          device packages and multi-brand device control (Wipro, Philips Hue) &mdash; on/off, dimming, and
+          power monitoring.</p>
+          <div class="tags"><span>Swift</span><span>Sole developer</span><span>IoT</span></div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Resume Section -->
+  <section id="resume">
+    <div class="resume-inner">
+      <h2 class="fade-in">Resume</h2>
+      <p class="resume-sub fade-in">Four years across OTT/streaming, health-tech, IoT &amp; e-commerce.</p>
+      <div class="resume-actions fade-in">
+        <a href="Piyush_Tiwari_Resume.pdf" class="btn-primary" download>&#8595;&nbsp; Download r&eacute;sum&eacute; (PDF)</a>
+      </div>
+
+      <div class="timeline">
+        <div class="tl-entry fade-in">
+          <div class="tl-head">
+            <div class="tl-role">iOS &amp; tvOS Engineer <span>&middot; Logituit</span></div>
+            <div class="tl-date">Feb 2026 &ndash; Present</div>
+          </div>
+          <div class="tl-desc">Live sports scorecard SDK (tvOS &amp; iOS), the iOS subscription layer of a Kotlin Multiplatform app (StoreKit&nbsp;2), and the Sun NXT Shorts feature built solo across iOS and tvOS.</div>
+        </div>
+
+        <div class="tl-entry fade-in">
+          <div class="tl-head">
+            <div class="tl-role">iOS Developer <span>&middot; Tantech Technologies</span></div>
+            <div class="tl-date">Apr 2024 &ndash; Feb 2026</div>
+          </div>
+          <div class="tl-desc">Led iOS development for e-commerce apps as the senior mobile engineer, and guided Android &amp; backend developers on architecture and delivery.</div>
+        </div>
+
+        <div class="tl-entry fade-in">
+          <div class="tl-head">
+            <div class="tl-role">iOS Developer (Sole Developer) <span>&middot; RUS&Eacute;</span></div>
+            <div class="tl-date">Aug 2023 &ndash; Feb 2024</div>
+          </div>
+          <div class="tl-desc">Built RUS&Eacute; Homes end to end &mdash; a smart-home marketplace and multi-brand device control (Wipro, Philips Hue): on/off, dimming, power monitoring.</div>
+        </div>
+
+        <div class="tl-entry fade-in">
+          <div class="tl-head">
+            <div class="tl-role">iOS Developer <span>&middot; Agatsa Software</span></div>
+            <div class="tl-date">Jan 2023 &ndash; Aug 2023</div>
+          </div>
+          <div class="tl-desc">SanketLife pocket ECG app: BLE pairing, guided ECG capture, PDF report export, cardiologist connect, and SDK support for external clients.</div>
+        </div>
+
+        <div class="tl-entry fade-in">
+          <div class="tl-head">
+            <div class="tl-role">Android &#8594; iOS Developer <span>&middot; Mirrorsize US Inc.</span></div>
+            <div class="tl-date">Feb 2022 &ndash; Dec 2022</div>
+          </div>
+          <div class="tl-desc">Moved to iOS within 3 months; contributed to 10+ App Store apps for AI body sizing &mdash; capture-to-measurement flows, payments, and order history.</div>
+        </div>
+
+        <div class="tl-entry fade-in">
+          <div class="tl-head">
+            <div class="tl-role">B.Tech, Information Technology <span>&middot; Indraprastha Engineering College</span></div>
+            <div class="tl-date">2022</div>
+          </div>
+          <div class="tl-desc">B.Tech in Information Technology, graduated 2022.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact">
+    <h2>Contact Me</h2>
+    <div class="contact-links">
+      <a href="mailto:er.piyush3006@gmail.com" class="contact-item">
+        <span class="contact-icon">&#128231;</span>
+        <span class="contact-text">er.piyush3006@gmail.com</span>
+      </a>
+
+      <a href="https://www.linkedin.com/in/piyushtiwari99" target="_blank" rel="noopener" class="contact-item">
+        <span class="contact-icon">&#128279;</span>
+        <span class="contact-text">linkedin.com/in/piyushtiwari99</span>
+      </a>
+
+      <a href="https://github.com/bemsablo1" target="_blank" rel="noopener" class="contact-item">
+        <span class="contact-icon">&#128039;</span>
+        <span class="contact-text">github.com/bemsablo1</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- Project Detail Modal -->
+  <div id="project-modal" class="modal" aria-hidden="true">
+    <div class="modal-backdrop" data-close></div>
+    <div class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <button class="modal-close" data-close aria-label="Close">&times;</button>
+      <div class="modal-banner" id="modal-banner">
+        <span id="modal-mark"></span>
+        <span id="modal-plat"></span>
+      </div>
+      <div class="modal-body">
+        <h3 id="modal-title"></h3>
+        <p id="modal-overview"></p>
+        <h4>What I did</h4>
+        <ul id="modal-points"></ul>
+        <div class="tags" id="modal-tags"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
